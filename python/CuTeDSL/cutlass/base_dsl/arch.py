@@ -141,7 +141,13 @@ class Arch(Enum, metaclass=ArchMeta):
 
     @classmethod
     def from_string(cls, arch_str: str) -> "Arch":
-        return cls[arch_str]
+        try:
+            return cls[arch_str]
+        except KeyError as e:
+            raise RuntimeError(
+                f"Unsupported GPU architecture '{arch_str}'"
+                "CuTe DSL currently supports Ampere (sm_80) and newer GPUS."
+            ) from e
 
     def to_string(self) -> str:
         return self.name
